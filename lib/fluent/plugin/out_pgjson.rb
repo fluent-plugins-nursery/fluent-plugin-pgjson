@@ -13,10 +13,10 @@ class PgJsonOutput < Fluent::BufferedOutput
   config_param :tag_col    , :string  , :default => 'tag'
   config_param :record_col , :string  , :default => 'record'
 
-
   def initialize
     super
     require 'pg'
+    @conn = nil
   end
 
   def configure(conf)
@@ -24,14 +24,10 @@ class PgJsonOutput < Fluent::BufferedOutput
     @stmt_name = 'insert'
   end
 
-  def start
-    super
-    init_connection
-  end
-
   def shutdown
     super
-    if !@conn.nil? and !@conn.finished?
+
+    if ! @conn.nil? and ! @conn.finished?
       @conn.close()
     end
   end
@@ -42,30 +38,40 @@ class PgJsonOutput < Fluent::BufferedOutput
 
   def write(chunk)
     begin
+      init_connection
       sql = build_sql(chunk)
       @conn.exec(sql)
     rescue
-      #TODO
+      begin
+        @conn.close()
+      rescue
+      end
+
+      @conn = nil 
       raise
     end
   end
 
   private
   def init_connection
-    begin
-      @conn = PGconn.new(:dbname => @database, :host => @host, :port => @port, :user => @user, :password => @password)
-      @conn.setnonblocking(true)
-    rescue
-      raise Fluent::ConfigError, "failed to connect PostgreSQL Server at #{@host}:#{@port}"
-    end
-  end
+    if @conn.nil?
+      $log.debug "Connecting to PostgreSQL server #{@host}:#{@port}, database #{@database}..."
 
-  def prepare_statement
-    begin
-      @conn.prepare(@stmt_name, sql)
-    rescue
-      #TODO
-      raise
+      begin
+        @conn = PGconn.new(:dbname => @database, :host => @host, :port => @port, :user => @user, :password => @password)
+        @conn.setnonblocking(true)
+      rescue
+        if ! conn.nil?
+          begin
+            @conn.close()
+          rescue
+          end
+
+          @conn - nil
+        end
+
+        raise
+      end
     end
   end
 
