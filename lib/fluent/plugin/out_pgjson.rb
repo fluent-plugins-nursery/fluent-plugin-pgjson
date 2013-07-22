@@ -61,7 +61,7 @@ class PgJsonOutput < Fluent::BufferedOutput
         @conn = PGconn.new(:dbname => @database, :host => @host, :port => @port, :user => @user, :password => @password)
         @conn.setnonblocking(true)
       rescue
-        if ! $conn.nil?
+        if ! @conn.nil?
           begin
             @conn.close()
           rescue
