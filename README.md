@@ -54,7 +54,7 @@ CREATE TABLE fluentd (
 |---|---|---|
 |host|postgres server hostname|localhost|
 |port|postgres server port number|5432|
-|sslmode|use ssl <disable/allow/prefer/require>|prefer||
+|sslmode|use ssl (disable/allow/prefer/require)|prefer||
 |database|database name to which records will be inserted||
 |table|table name to which records will be inserted||
 |user|user name used to connect database|nil|
