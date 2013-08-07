@@ -5,6 +5,7 @@ class PgJsonOutput < Fluent::BufferedOutput
 
   config_param :host       , :string  , :default => 'localhost'
   config_param :port       , :integer , :default => 5432
+  config_param :sslmode    , :string  , :default => 'prefer'
   config_param :database   , :string
   config_param :table      , :string
   config_param :user       , :string  , :default => nil
@@ -58,7 +59,7 @@ class PgJsonOutput < Fluent::BufferedOutput
       $log.debug "Connecting to PostgreSQL server #{@host}:#{@port}, database #{@database}..."
 
       begin
-        @conn = PGconn.new(:dbname => @database, :host => @host, :port => @port, :user => @user, :password => @password)
+        @conn = PGconn.new(:dbname => @database, :host => @host, :port => @port, :sslmode => @sslmode, :user => @user, :password => @password)
         @conn.setnonblocking(true)
       rescue
         if ! @conn.nil?
