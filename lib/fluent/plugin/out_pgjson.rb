@@ -46,35 +46,26 @@ class PgJsonOutput < Fluent::BufferedOutput
       end
       @conn.put_copy_end
     rescue
-      begin
-        @conn.close()
-      rescue
-      end
-
+      @conn.close()
       @conn = nil
-      raise
+      raise "failed to send data to postgres: #$!"
     end
   end
 
   private
   def init_connection
     if @conn.nil?
-      $log.debug "Connecting to PostgreSQL server #{@host}:#{@port}, database #{@database}..."
+      $log.debug "connecting to PostgreSQL server #{@host}:#{@port}, database #{@database}..."
 
       begin
         @conn = PGconn.new(:dbname => @database, :host => @host, :port => @port, :sslmode => @sslmode, :user => @user, :password => @password)
         @conn.setnonblocking(true)
       rescue
         if ! @conn.nil?
-          begin
-            @conn.close()
-          rescue
-          end
-
+          @conn.close()
           @conn = nil
         end
-
-        raise
+        raise "failed to initialize connection: #$!"
       end
     end
   end
