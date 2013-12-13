@@ -48,7 +48,7 @@ class PgJsonOutput < Fluent::BufferedOutput
       rescue
       end
 
-      @conn = nil 
+      @conn = nil
       raise
     end
   end
@@ -68,7 +68,7 @@ class PgJsonOutput < Fluent::BufferedOutput
           rescue
           end
 
-          @conn - nil
+          @conn = nil
         end
 
         raise
