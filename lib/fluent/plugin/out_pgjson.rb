@@ -22,7 +22,6 @@ class PgJsonOutput < Fluent::BufferedOutput
 
   def configure(conf)
     super
-    @stmt_name = 'insert'
   end
 
   def shutdown
@@ -40,8 +39,11 @@ class PgJsonOutput < Fluent::BufferedOutput
   def write(chunk)
     begin
       init_connection
-      sql = build_sql(chunk)
-      @conn.exec(sql)
+      @conn.exec("COPY #{@table} (#{@tag_col}, #{@time_col}, #{@record_col}) FROM STDIN WITH DELIMITER E'\\x01'")
+      chunk.msgpack_each do |tag, time, record|
+        @conn.put_copy_data "#{tag}\x01#{Time.at(time).to_s}\x01#{record.to_json}\n"
+      end
+      @conn.put_copy_end
     rescue
       begin
         @conn.close()
@@ -74,22 +76,6 @@ class PgJsonOutput < Fluent::BufferedOutput
         raise
       end
     end
-  end
-
-  def build_sql(chunk)
-    values = build_values(chunk)
-    sql =<<"SQL"
-INSERT INTO #{@table} (#{@tag_col}, #{@time_col}, #{@record_col})
-VALUES #{values};
-SQL
-  end
-
-  def build_values(chunk)
-    tmp = []
-    chunk.msgpack_each do |tag, time, record|
-      tmp << ("("+[tag, Time.at(time), record.to_json].map{|s| @conn.escape_literal(s.to_s)}.join(',')+")")
-    end
-    tmp.join(',')
   end
 end
 
