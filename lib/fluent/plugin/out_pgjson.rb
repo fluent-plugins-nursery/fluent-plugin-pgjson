@@ -13,6 +13,7 @@ class PgJsonOutput < Fluent::BufferedOutput
   config_param :time_col   , :string  , :default => 'time'
   config_param :tag_col    , :string  , :default => 'tag'
   config_param :record_col , :string  , :default => 'record'
+  config_param :messagepack, :bool  , :default => false
 
   def initialize
     super
@@ -41,7 +42,7 @@ class PgJsonOutput < Fluent::BufferedOutput
       init_connection
       @conn.exec("COPY #{@table} (#{@tag_col}, #{@time_col}, #{@record_col}) FROM STDIN WITH DELIMITER E'\\x01'")
       chunk.msgpack_each do |tag, time, record|
-        @conn.put_copy_data "#{tag}\x01#{Time.at(time).to_s}\x01#{record.to_json}\n"
+        @conn.put_copy_data "#{tag}\x01#{Time.at(time).to_s}\x01#{record_value(record)}\n"
       end
       @conn.put_copy_end
     rescue
@@ -75,6 +76,14 @@ class PgJsonOutput < Fluent::BufferedOutput
 
         raise
       end
+    end
+  end
+
+  def record_value(record)
+    if @msgpack
+      "\\#{@conn.escape_bytea(record.to_msgpack)}"
+    else
+      record.to_json
     end
   end
 end
