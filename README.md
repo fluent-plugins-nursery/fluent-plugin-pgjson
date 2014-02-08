@@ -1,4 +1,4 @@
-# Fluent::Plugin::PgJson
+# Fluent::Plugin::PgJson, a plugin for [Fluentd](http://fluentd.org)
 
 Output Plugin for PostgreSQL Json Type.
 
