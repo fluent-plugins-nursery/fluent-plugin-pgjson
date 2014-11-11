@@ -3,7 +3,7 @@ $:.push File.expand_path("../lib", __FILE__)
 
 Gem::Specification.new do |s|
   s.name        = "fluent-plugin-pgjson"
-  s.version     = "0.0.4"
+  s.version     = "0.0.5"
   s.authors     = ["OKUNO Akihiro"]
   s.email       = ["choplin.choplin@gmail.com"]
   s.homepage    = "https://github.com/choplin/fluent-plugin-pgjson"
