@@ -46,8 +46,10 @@ class PgJsonOutput < Fluent::BufferedOutput
       end
       @conn.put_copy_end
     rescue
-      @conn.close()
-      @conn = nil
+      if ! @conn.nil?
+        @conn.close()
+        @conn = nil
+      end
       raise "failed to send data to postgres: #$!"
     end
   end
