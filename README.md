@@ -76,7 +76,6 @@ CREATE TABLE fluentd (
 
 ## Copyright
 
-<table>
-<tr><td>Copyright</td><td>Copyright (c) 2012,2013 OKUNO Akihiro</td></tr>
-<tr><td>License</td><td>Apache License, Version 4.0</td></tr>
-</table>
+* Copyright (c) 2014- OKUNO Akihiro
+* License
+    * Apache License, version 2.0
