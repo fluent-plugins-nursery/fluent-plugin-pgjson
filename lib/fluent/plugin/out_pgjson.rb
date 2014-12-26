@@ -38,8 +38,8 @@ class PgJsonOutput < Fluent::BufferedOutput
   end
 
   def write(chunk)
+    init_connection
     begin
-      init_connection
       @conn.exec("COPY #{@table} (#{@tag_col}, #{@time_col}, #{@record_col}) FROM STDIN WITH DELIMITER E'\\x01'")
       chunk.msgpack_each do |tag, time, record|
         @conn.put_copy_data "#{tag}\x01#{Time.at(time).to_s}\x01#{record_value(record)}\n"
