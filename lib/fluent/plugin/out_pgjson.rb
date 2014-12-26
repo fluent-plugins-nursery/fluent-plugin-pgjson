@@ -39,18 +39,20 @@ class PgJsonOutput < Fluent::BufferedOutput
 
   def write(chunk)
     init_connection
+    @conn.exec("COPY #{@table} (#{@tag_col}, #{@time_col}, #{@record_col}) FROM STDIN WITH DELIMITER E'\\x01'")
     begin
-      @conn.exec("COPY #{@table} (#{@tag_col}, #{@time_col}, #{@record_col}) FROM STDIN WITH DELIMITER E'\\x01'")
       chunk.msgpack_each do |tag, time, record|
         @conn.put_copy_data "#{tag}\x01#{Time.at(time).to_s}\x01#{record_value(record)}\n"
       end
+    rescue => err
+      errmsg = "%s while copy data: %s" % [ err.class.name, err.message ]
+      @conn.put_copy_end( errmsg )
+      @conn.get_result
+      raise
+    else
       @conn.put_copy_end
-    rescue
-      if ! @conn.nil?
-        @conn.close()
-        @conn = nil
-      end
-      raise "failed to send data to postgres: #$!"
+      res = @conn.get_result
+      raise res.result_error_message if res.result_status!=PG::PGRES_COMMAND_OK
     end
   end
 
@@ -61,7 +63,6 @@ class PgJsonOutput < Fluent::BufferedOutput
 
       begin
         @conn = PGconn.new(:dbname => @database, :host => @host, :port => @port, :sslmode => @sslmode, :user => @user, :password => @password)
-        @conn.setnonblocking(true)
       rescue
         if ! @conn.nil?
           @conn.close()

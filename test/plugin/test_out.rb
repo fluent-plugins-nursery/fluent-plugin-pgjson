@@ -85,6 +85,24 @@ class PgJsonOutputTest < Test::Unit::TestCase
     end
   end
 
+  def test_invalid_json
+    with_connection do |conn|
+      tag = 'test'
+      time = Time.parse("2014-12-26 07:58:37 UTC")
+
+      d = create_driver(CONFIG, tag)
+      instance = d.instance
+      def instance.record_value(record)
+        'invalid json'
+      end
+      d.emit('', time.to_i)
+
+      assert_raise RuntimeError do
+        d.run
+      end
+    end
+  end
+
 
   def ensure_connection
     conn = nil
