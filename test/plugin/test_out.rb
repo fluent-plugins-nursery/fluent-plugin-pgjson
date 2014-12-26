@@ -67,6 +67,25 @@ class PgJsonOutputTest < Test::Unit::TestCase
     end
   end
 
+  def test_escape_of_backslash
+    with_connection do |conn|
+      tag = 'test'
+      time = Time.parse("2014-12-26 07:58:37 UTC")
+      record = {"a"=>"\"foo\""}
+
+      d = create_driver(CONFIG, tag)
+      d.emit(record, time.to_i)
+      d.run
+      wait_for_data(conn)
+
+      res = conn.exec("select * from #{TABLE}")[0]
+      assert_equal res[TAG_COL], tag
+      assert_equal Time.parse(res[TIME_COL]), time
+      assert_equal res[RECORD_COL], record.to_json
+    end
+  end
+
+
   def ensure_connection
     conn = nil
 
