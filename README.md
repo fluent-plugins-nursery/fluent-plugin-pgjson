@@ -27,6 +27,17 @@ CREATE TABLE fluentd (
     ,record Json
 );
 ```
+### JSONB?
+
+Yes! Just define a record column as JSONB type.
+
+```
+CREATE TABLE fluentd (
+    tag Text
+    ,time Timestamptz
+    ,record Jsonb
+);
+```
 
 ## Configuration
 
