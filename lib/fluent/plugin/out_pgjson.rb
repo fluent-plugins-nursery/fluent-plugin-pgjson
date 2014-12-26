@@ -13,7 +13,7 @@ class PgJsonOutput < Fluent::BufferedOutput
   config_param :time_col   , :string  , :default => 'time'
   config_param :tag_col    , :string  , :default => 'tag'
   config_param :record_col , :string  , :default => 'record'
-  config_param :messagepack, :bool  , :default => false
+  config_param :msgpack    , :bool    , :default => false
 
   def initialize
     super
