@@ -76,7 +76,9 @@ class PgJsonOutput < Fluent::BufferedOutput
     if @msgpack
       "\\#{@conn.escape_bytea(record.to_msgpack)}"
     else
-      record.to_json
+      json = record.to_json
+      json.gsub!(/\\/){ '\\\\' }
+      json
     end
   end
 end
