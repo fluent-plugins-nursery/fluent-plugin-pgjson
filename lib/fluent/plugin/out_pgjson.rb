@@ -9,7 +9,7 @@ class PgJsonOutput < Fluent::BufferedOutput
   config_param :database   , :string
   config_param :table      , :string
   config_param :user       , :string  , :default => nil
-  config_param :password   , :string  , :default => nil
+  config_param :password   , :string  , :default => nil , :secret => true
   config_param :time_col   , :string  , :default => 'time'
   config_param :tag_col    , :string  , :default => 'tag'
   config_param :record_col , :string  , :default => 'record'
