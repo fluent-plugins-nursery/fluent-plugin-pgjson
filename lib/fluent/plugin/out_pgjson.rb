@@ -40,11 +40,11 @@ class PgJsonOutput < Fluent::Output
   end
 
   def shutdown
-    super
-
     if ! @conn.nil? and ! @conn.finished?
       @conn.close()
     end
+
+    super
   end
 
   def formatted_to_msgpack_binary
