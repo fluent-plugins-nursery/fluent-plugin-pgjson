@@ -19,4 +19,5 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "fluentd"
   s.add_runtime_dependency "pg"
   s.add_development_dependency "test-unit", ">= 3.1.0"
+  s.add_development_dependency "rake", ">= 11.0"
 end
