@@ -7,8 +7,8 @@ class PgJsonOutputTest < Test::Unit::TestCase
   PORT = 5432
   DATABASE = "postgres"
   TABLE = "test_fluentd_#{SecureRandom.hex}"
-  USER = "postgres"
-  PASSWORD = "postgres"
+  USER = ENV["PSQL_USER"] || "postgres"
+  PASSWORD = ENV["PSQL_PASSWORD"] || "postgres"
 
   TIME_COL = "time"
   TAG_COL = "tag"
