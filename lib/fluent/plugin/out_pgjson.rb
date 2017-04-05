@@ -34,6 +34,9 @@ class PgJsonOutput < Fluent::Output
   def configure(conf)
     compat_parameters_convert(conf, :buffer)
     super
+    unless @chunk_key_tag
+      raise Fluent::ConfigError, "'tag' in chunk_keys is required."
+    end
   end
 
   def shutdown

@@ -53,6 +53,28 @@ class PgJsonOutputTest < Test::Unit::TestCase
     assert_equal RECORD_COL, d.instance.record_col
   end
 
+  def test_invalid_chunk_keys
+    assert_raise_message(/'tag' in chunk_keys is required./) do
+      create_driver(Fluent::Config::Element.new(
+                      'ROOT', '', {
+                        '@type' => 'pgjson',
+                        'host' => "#{HOST}",
+                        'port' => "#{PORT}",
+                        'database' => "#{DATABASE}",
+                        'table' => "#{TABLE}",
+                        'user' => "#{USER}",
+                        'password' => "#{PASSWORD}",
+                        'time_col' => "#{TIME_COL}",
+                        'tag_col' => "#{TAG_COL}",
+                        'record_col' => "#{RECORD_COL}",
+                      }, [
+                        Fluent::Config::Element.new('buffer', 'mykey', {
+                                                      'chunk_keys' => 'mykey'
+                                                    }, [])
+                      ]))
+    end
+  end
+
   def test_write
     with_connection do |conn|
       tag = 'test'
