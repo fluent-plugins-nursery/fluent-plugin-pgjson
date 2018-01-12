@@ -90,7 +90,7 @@ class PgJsonOutput < Fluent::Output
       $log.debug "connecting to PostgreSQL server #{@host}:#{@port}, database #{@database}..."
 
       begin
-        @conn = PGconn.new(:dbname => @database, :host => @host, :port => @port, :sslmode => @sslmode, :user => @user, :password => @password)
+        @conn = PG::Connection.new(:dbname => @database, :host => @host, :port => @port, :sslmode => @sslmode, :user => @user, :password => @password)
       rescue
         if ! @conn.nil?
           @conn.close()
