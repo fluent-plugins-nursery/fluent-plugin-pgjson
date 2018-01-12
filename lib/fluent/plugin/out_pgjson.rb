@@ -23,7 +23,7 @@ class PgJsonOutput < Fluent::Output
   config_param :tag_col    , :string  , :default => 'tag'
   config_param :record_col , :string  , :default => 'record'
   config_param :msgpack    , :bool    , :default => false
-  config_param :encoder    , :enum, list: [:yajl, :json], :default => :yajl
+  config_param :encoder    , :enum, list: [:yajl, :json], :default => :json
   config_section :buffer do
     config_set_default :@type, DEFAULT_BUFFER_TYPE
     config_set_default :chunk_keys, ['tag']
