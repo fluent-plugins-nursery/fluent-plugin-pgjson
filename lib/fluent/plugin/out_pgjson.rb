@@ -60,6 +60,10 @@ class PgJsonOutput < Fluent::Output
     true
   end
 
+  def multi_workers_ready?
+    true
+  end
+
   def format(tag, time, record)
     [time, record].to_msgpack
   end
