@@ -1,7 +1,14 @@
-module Fluent
+require 'fluent/plugin/output'
+require 'pg'
 
-class PgJsonOutput < Fluent::BufferedOutput
+module Fluent::Plugin
+
+class PgJsonOutput < Fluent::Output
   Fluent::Plugin.register_output('pgjson', self)
+
+  helpers :compat_parameters
+
+  DEFAULT_BUFFER_TYPE = "memory"
 
   config_param :host       , :string  , :default => 'localhost'
   config_param :port       , :integer , :default => 5432
@@ -14,34 +21,46 @@ class PgJsonOutput < Fluent::BufferedOutput
   config_param :tag_col    , :string  , :default => 'tag'
   config_param :record_col , :string  , :default => 'record'
   config_param :msgpack    , :bool    , :default => false
+  config_section :buffer do
+    config_set_default :@type, DEFAULT_BUFFER_TYPE
+    config_set_default :chunk_keys, ['tag']
+  end
 
   def initialize
     super
-    require 'pg'
     @conn = nil
   end
 
   def configure(conf)
+    compat_parameters_convert(conf, :buffer)
     super
-  end
-
-  def shutdown
-    super
-
-    if ! @conn.nil? and ! @conn.finished?
-      @conn.close()
+    unless @chunk_key_tag
+      raise Fluent::ConfigError, "'tag' in chunk_keys is required."
     end
   end
 
+  def shutdown
+    if ! @conn.nil? and ! @conn.finished?
+      @conn.close()
+    end
+
+    super
+  end
+
+  def formatted_to_msgpack_binary
+    true
+  end
+
   def format(tag, time, record)
-    [tag, time, record].to_msgpack
+    [time, record].to_msgpack
   end
 
   def write(chunk)
     init_connection
     @conn.exec("COPY #{@table} (#{@tag_col}, #{@time_col}, #{@record_col}) FROM STDIN WITH DELIMITER E'\\x01'")
     begin
-      chunk.msgpack_each do |tag, time, record|
+      tag = chunk.metadata.tag
+      chunk.msgpack_each do |time, record|
         @conn.put_copy_data "#{tag}\x01#{Time.at(time).to_s}\x01#{record_value(record)}\n"
       end
     rescue => err
