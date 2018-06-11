@@ -17,6 +17,7 @@ class PgJsonOutputTest < Test::Unit::TestCase
   TIME_COL = "time"
   TAG_COL = "tag"
   RECORD_COL = "record"
+  ENCODER = JSON
 
   CONFIG = %[
     type pgjson
@@ -51,6 +52,7 @@ class PgJsonOutputTest < Test::Unit::TestCase
     assert_equal TIME_COL, d.instance.time_col
     assert_equal TAG_COL, d.instance.tag_col
     assert_equal RECORD_COL, d.instance.record_col
+    assert_equal ENCODER, d.instance.encoder
   end
 
   def test_invalid_chunk_keys

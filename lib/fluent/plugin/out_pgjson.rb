@@ -1,5 +1,7 @@
 require 'fluent/plugin/output'
 require 'pg'
+require 'yajl'
+require 'json'
 
 module Fluent::Plugin
 
@@ -21,6 +23,7 @@ class PgJsonOutput < Fluent::Output
   config_param :tag_col    , :string  , :default => 'tag'
   config_param :record_col , :string  , :default => 'record'
   config_param :msgpack    , :bool    , :default => false
+  config_param :encoder    , :enum, list: [:yajl, :json], :default => :json
   config_section :buffer do
     config_set_default :@type, DEFAULT_BUFFER_TYPE
     config_set_default :chunk_keys, ['tag']
@@ -37,6 +40,12 @@ class PgJsonOutput < Fluent::Output
     unless @chunk_key_tag
       raise Fluent::ConfigError, "'tag' in chunk_keys is required."
     end
+    @encoder = case @encoder
+               when :yajl
+                 Yajl
+               when :json
+                 JSON
+               end
   end
 
   def shutdown
@@ -81,7 +90,7 @@ class PgJsonOutput < Fluent::Output
       $log.debug "connecting to PostgreSQL server #{@host}:#{@port}, database #{@database}..."
 
       begin
-        @conn = PGconn.new(:dbname => @database, :host => @host, :port => @port, :sslmode => @sslmode, :user => @user, :password => @password)
+        @conn = PG::Connection.new(:dbname => @database, :host => @host, :port => @port, :sslmode => @sslmode, :user => @user, :password => @password)
       rescue
         if ! @conn.nil?
           @conn.close()
@@ -96,7 +105,7 @@ class PgJsonOutput < Fluent::Output
     if @msgpack
       "\\#{@conn.escape_bytea(record.to_msgpack)}"
     else
-      json = record.to_json
+      json = @encoder.dump(record)
       json.gsub!(/\\/){ '\\\\' }
       json
     end
