@@ -39,6 +39,12 @@ CREATE TABLE fluentd (
 );
 ```
 
+### Configurable JSON Encoder
+
+Fluentd's standard JSON encoder is `yajl`.
+`yajl` is robust for invalid byte sequence.
+But this plugin's default value is `json` which is Ruby standard JSON encoder for backward compatibility.
+
 ## Configuration
 
 ### Example
@@ -73,6 +79,8 @@ CREATE TABLE fluentd (
 |time_col|column name to insert time|time|
 |tag_col|column name to insert tag|tag|
 |record_col|column name to insert record|record|
+|msgpack|use msgpack format for inserting records|false|
+|encoder|choose prefer JSON encoder (yajl/json)|json|
 
 ## Copyright
 
