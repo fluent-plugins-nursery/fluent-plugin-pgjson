@@ -24,6 +24,8 @@ class PgJsonOutput < Fluent::Output
   config_param :record_col , :string  , :default => 'record'
   config_param :msgpack    , :bool    , :default => false
   config_param :encoder    , :enum, list: [:yajl, :json], :default => :json
+  config_param :time_format, :string  , :default => '%F %T.%N %z'
+
   config_section :buffer do
     config_set_default :@type, DEFAULT_BUFFER_TYPE
     config_set_default :chunk_keys, ['tag']
@@ -61,7 +63,7 @@ class PgJsonOutput < Fluent::Output
   end
 
   def format(tag, time, record)
-    [time, record].to_msgpack
+    [Time.at(time).strftime(@time_format), record].to_msgpack
   end
 
   def write(chunk)
@@ -70,7 +72,7 @@ class PgJsonOutput < Fluent::Output
     begin
       tag = chunk.metadata.tag
       chunk.msgpack_each do |time, record|
-        @conn.put_copy_data "#{tag}\x01#{Time.at(time).to_s}\x01#{record_value(record)}\n"
+        @conn.put_copy_data "#{tag}\x01#{time}\x01#{record_value(record)}\n"
       end
     rescue => err
       errmsg = "%s while copy data: %s" % [ err.class.name, err.message ]
