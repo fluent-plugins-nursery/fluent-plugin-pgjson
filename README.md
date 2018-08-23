@@ -51,7 +51,7 @@ But this plugin's default value is `json` which is Ruby standard JSON encoder fo
 
 ```
 <match **>
-  type pgjson
+  @type pgjson
   host localhost
   port 5432
   sslmode require
