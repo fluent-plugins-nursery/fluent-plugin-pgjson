@@ -13,5 +13,5 @@ services:
   - postgresql
 
 before_script:
-  - psql -c "create role fluentd with CREATEDB password 'fluentd';" -U postgres
+  - psql -c "create role fluentd with LOGIN CREATEDB password 'fluentd';" -U postgres
 
