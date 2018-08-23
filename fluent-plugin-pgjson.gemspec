@@ -6,8 +6,8 @@ Gem::Specification.new do |s|
   s.version     = "0.0.9"
   s.authors     = ["OKUNO Akihiro"]
   s.email       = ["choplin.choplin@gmail.com"]
-  s.homepage    = "https://github.com/choplin/fluent-plugin-pgjson"
-  s.summary     = %q{}
+  s.homepage    = "https://github.com/fluent-plugins-nursery/fluent-plugin-pgjson"
+  s.summary     = %q{Fluentd Output Plugin for PostgreSQL JSON Type.}
   s.description = %q{}
   s.license  = "Apache-2.0"
 
