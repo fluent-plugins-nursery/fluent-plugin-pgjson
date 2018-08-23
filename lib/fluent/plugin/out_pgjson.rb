@@ -93,7 +93,7 @@ class PgJsonOutput < Fluent::Plugin::Output
   private
   def init_connection
     if @conn.nil?
-      $log.debug "connecting to PostgreSQL server #{@host}:#{@port}, database #{@database}..."
+      log.debug "connecting to PostgreSQL server #{@host}:#{@port}, database #{@database}..."
 
       begin
         @conn = PG::Connection.new(:dbname => @database, :host => @host, :port => @port, :sslmode => @sslmode, :user => @user, :password => @password)
