@@ -1,21 +1,21 @@
-require 'fluent/plugin/output'
-require 'pg'
-require 'yajl'
-require 'json'
+require "fluent/plugin/output"
+require "pg"
+require "yajl"
+require "json"
 
 module Fluent::Plugin
   class PgJsonOutput < Fluent::Plugin::Output
-    Fluent::Plugin.register_output('pgjson', self)
+    Fluent::Plugin.register_output("pgjson", self)
 
     helpers :compat_parameters
 
     DEFAULT_BUFFER_TYPE = "memory"
 
     desc "The hostname of PostgreSQL server"
-    config_param :host, :string, default: 'localhost'
+    config_param :host, :string, default: "localhost"
     desc "The port of PostgreSQL server"
     config_param :port, :integer, default: 5432
-    config_param :sslmode, :string, default: 'prefer'
+    config_param :sslmode, :string, default: "prefer"
     desc "The database name to connect"
     config_param :database, :string
     desc "The table name to insert records"
@@ -25,21 +25,21 @@ module Fluent::Plugin
     desc "The password to connect database"
     config_param :password, :string, default: nil, secret: true
     desc "The column name for the time"
-    config_param :time_col, :string, default: 'time'
+    config_param :time_col, :string, default: "time"
     desc "The column name for the tag"
-    config_param :tag_col, :string, default: 'tag'
+    config_param :tag_col, :string, default: "tag"
     desc "The column name for the record"
-    config_param :record_col, :string, default: 'record'
+    config_param :record_col, :string, default: "record"
     desc "If true, insert records formatted as msgpack"
     config_param :msgpack, :bool, default: false
     desc "JSON encoder (yajl/json)"
     config_param :encoder, :enum, list: [:yajl, :json], default: :json
 
-    config_param :time_format, :string, default: '%F %T.%N %z'
+    config_param :time_format, :string, default: "%F %T.%N %z"
 
     config_section :buffer do
       config_set_default :@type, DEFAULT_BUFFER_TYPE
-      config_set_default :chunk_keys, ['tag']
+      config_set_default :chunk_keys, ["tag"]
     end
 
     def initialize
