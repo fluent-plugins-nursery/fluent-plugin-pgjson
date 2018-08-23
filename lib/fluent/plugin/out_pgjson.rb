@@ -15,7 +15,8 @@ module Fluent::Plugin
     config_param :host, :string, default: "localhost"
     desc "The port of PostgreSQL server"
     config_param :port, :integer, default: 5432
-    config_param :sslmode, :string, default: "prefer"
+    desc "Set the sslmode to enable Eavesdropping protection/MITM protection"
+    config_param :sslmode, :enum, list: %i[disable allow prefer require verify-ca verify-full], default: :prefer
     desc "The database name to connect"
     config_param :database, :string
     desc "The table name to insert records"
@@ -33,7 +34,7 @@ module Fluent::Plugin
     desc "If true, insert records formatted as msgpack"
     config_param :msgpack, :bool, default: false
     desc "JSON encoder (yajl/json)"
-    config_param :encoder, :enum, list: [:yajl, :json], default: :json
+    config_param :encoder, :enum, list: [:yajl, :json], default: :yajl
 
     config_param :time_format, :string, default: "%F %T.%N %z"
 

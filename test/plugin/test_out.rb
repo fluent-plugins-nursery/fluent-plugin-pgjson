@@ -17,7 +17,7 @@ class PgJsonOutputTest < Test::Unit::TestCase
   TIME_COL = "time"
   TAG_COL = "tag"
   RECORD_COL = "record"
-  ENCODER = JSON
+  ENCODER = Yajl
 
   CONFIG = %[
     @type pgjson
