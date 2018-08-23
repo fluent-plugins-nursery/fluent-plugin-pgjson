@@ -20,7 +20,7 @@ class PgJsonOutputTest < Test::Unit::TestCase
   ENCODER = JSON
 
   CONFIG = %[
-    type pgjson
+    @type pgjson
     host #{HOST}
     port #{PORT}
     database #{DATABASE}
