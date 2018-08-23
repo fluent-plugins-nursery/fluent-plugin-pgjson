@@ -74,7 +74,7 @@ CREATE TABLE fluentd (
   * Default value: `localhost`.
 * **port** (integer) (optional): The port of PostgreSQL server
   * Default value: `5432`.
-* **sslmode** (enum) (optional): Set the sslmode to enable Eavesdropping protection/MITM protection. See [PostgreSQL: Documentation: 10: 33.18. SSL Support](https://www.postgresql.org/docs/10/static/libpq-ssl.html) for more details.
+* **sslmode** (enum) (optional): Set the sslmode to enable Eavesdropping protection/MITM protection. See [PostgreSQL Documentation](https://www.postgresql.org/docs/10/static/libpq-ssl.html) for more details.
   * Available values: disable, allow, prefer, require, verify-ca, verify-full
   * Default value: `prefer`.
 * **database** (string) (required): The database name to connect
