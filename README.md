@@ -14,11 +14,11 @@ $ fluent-gem install fluent-plugin-pgjson
 
 Specified table must have following schema:
 
-|col|type|
-|---|---|
-|{tag_col}|Text|
-|{time_col}|Timestamp WITH TIME ZONE|
-|{record_col}|Json|
+| col          | type                     |
+|--------------|--------------------------|
+| {tag_col}    | Text                     |
+| {time_col}   | Timestamp WITH TIME ZONE |
+| {record_col} | Json                     |
 
 ### Example
 
