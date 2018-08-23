@@ -9,10 +9,10 @@ class PgJsonOutputTest < Test::Unit::TestCase
 
   HOST = "localhost"
   PORT = 5432
-  DATABASE = "postgres"
+  DATABASE = "pgjsontest"
   TABLE = "test_fluentd_#{SecureRandom.hex}"
-  USER = ENV["PSQL_USER"] || "postgres"
-  PASSWORD = ENV["PSQL_PASSWORD"] || "postgres"
+  USER = "fluentd"
+  PASSWORD = "fluentd"
 
   TIME_COL = "time"
   TAG_COL = "tag"
@@ -20,7 +20,7 @@ class PgJsonOutputTest < Test::Unit::TestCase
   ENCODER = JSON
 
   CONFIG = %[
-    type pgjson
+    @type pgjson
     host #{HOST}
     port #{PORT}
     database #{DATABASE}
