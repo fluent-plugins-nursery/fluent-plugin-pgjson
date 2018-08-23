@@ -12,19 +12,19 @@ class PgJsonOutput < Fluent::Plugin::Output
 
   DEFAULT_BUFFER_TYPE = "memory"
 
-  config_param :host       , :string  , :default => 'localhost'
-  config_param :port       , :integer , :default => 5432
-  config_param :sslmode    , :string  , :default => 'prefer'
+  config_param :host       , :string  , default: 'localhost'
+  config_param :port       , :integer , default: 5432
+  config_param :sslmode    , :string  , default: 'prefer'
   config_param :database   , :string
   config_param :table      , :string
-  config_param :user       , :string  , :default => nil
-  config_param :password   , :string  , :default => nil , :secret => true
-  config_param :time_col   , :string  , :default => 'time'
-  config_param :tag_col    , :string  , :default => 'tag'
-  config_param :record_col , :string  , :default => 'record'
-  config_param :msgpack    , :bool    , :default => false
-  config_param :encoder    , :enum, list: [:yajl, :json], :default => :json
-  config_param :time_format, :string  , :default => '%F %T.%N %z'
+  config_param :user       , :string  , default: nil
+  config_param :password   , :string  , default: nil , secret: true
+  config_param :time_col   , :string  , default: 'time'
+  config_param :tag_col    , :string  , default: 'tag'
+  config_param :record_col , :string  , default: 'record'
+  config_param :msgpack    , :bool    , default: false
+  config_param :encoder    , :enum, list: [:yajl, :json], default: :json
+  config_param :time_format, :string  , default: '%F %T.%N %z'
 
   config_section :buffer do
     config_set_default :@type, DEFAULT_BUFFER_TYPE
@@ -96,7 +96,7 @@ class PgJsonOutput < Fluent::Plugin::Output
       log.debug "connecting to PostgreSQL server #{@host}:#{@port}, database #{@database}..."
 
       begin
-        @conn = PG::Connection.new(:dbname => @database, :host => @host, :port => @port, :sslmode => @sslmode, :user => @user, :password => @password)
+        @conn = PG::Connection.new(dbname: @database, host: @host, port: @port, sslmode: @sslmode, user: @user, password: @password)
       rescue
         if ! @conn.nil?
           @conn.close()

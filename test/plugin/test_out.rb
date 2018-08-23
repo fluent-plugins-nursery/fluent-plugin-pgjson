@@ -139,7 +139,7 @@ class PgJsonOutputTest < Test::Unit::TestCase
     conn = nil
 
     assert_nothing_raised do
-      conn = PG::Connection.new(:dbname => DATABASE, :host => HOST, :port => PORT, :user => USER, :password => PASSWORD)
+      conn = PG::Connection.new(dbname: DATABASE, host: HOST, port: PORT, user: USER, password: PASSWORD)
     end
 
     conn
