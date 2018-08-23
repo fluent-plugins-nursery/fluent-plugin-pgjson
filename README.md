@@ -6,11 +6,13 @@ Output Plugin for PostgreSQL Json Type.
 
 ## Installation
 
-`$ fluent-gem install fluent-plugin-pgjson`
+```
+$ fluent-gem install fluent-plugin-pgjson
+```
 
 ## Schema
 
-Specified table must have this schema.
+Specified table must have following schema:
 
 |col|type|
 |---|---|
@@ -39,12 +41,6 @@ CREATE TABLE fluentd (
 );
 ```
 
-### Configurable JSON Encoder
-
-Fluentd's standard JSON encoder is `yajl`.
-`yajl` is robust for invalid byte sequence.
-But this plugin's default value is `json` which is Ruby standard JSON encoder for backward compatibility.
-
 ## Configuration
 
 ### Example
@@ -67,20 +63,26 @@ But this plugin's default value is `json` which is Ruby standard JSON encoder fo
 
 ### Parameter
 
-|parameter|description|default|
-|---|---|---|
-|host|postgres server hostname|localhost|
-|port|postgres server port number|5432|
-|sslmode|use ssl (disable/allow/prefer/require)|prefer||
-|database|database name to which records will be inserted||
-|table|table name to which records will be inserted||
-|user|user name used to connect database|nil|
-|password|password uset to connect database|nil|
-|time_col|column name to insert time|time|
-|tag_col|column name to insert tag|tag|
-|record_col|column name to insert record|record|
-|msgpack|use msgpack format for inserting records|false|
-|encoder|choose prefer JSON encoder (yajl/json)|json|
+* **host** (string) (optional): The hostname of PostgreSQL server
+  * Default value: `localhost`.
+* **port** (integer) (optional): The port of PostgreSQL server
+  * Default value: `5432`.
+* **sslmode** (string) (optional):
+  * Default value: `prefer`.
+* **database** (string) (required): The database name to connect
+* **table** (string) (required): The table name to insert records
+* **user** (string) (optional): The user name to connect database
+* **password** (string) (optional): The password to connect database
+* **time_col** (string) (optional): The column name for the time
+  * Default value: `time`.
+* **tag_col** (string) (optional): The column name for the tag
+  * Default value: `tag`.
+* **record_col** (string) (optional): The column name for the record
+  * Default value: `record`.
+* **msgpack** (bool) (optional): If true, insert records formatted as msgpack
+* **encoder** (enum) (optional): JSON encoder (yajl/json)
+  * Available values: yajl, json
+  * Default value: `yajl`.
 
 ## Copyright
 
