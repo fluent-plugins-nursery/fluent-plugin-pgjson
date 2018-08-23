@@ -33,7 +33,7 @@ module Fluent::Plugin
     desc "If true, insert records formatted as msgpack"
     config_param :msgpack, :bool, default: false
     desc "JSON encoder (yajl/json)"
-    config_param :encoder, :enum, list: [:yajl, :json], default: :json
+    config_param :encoder, :enum, list: [:yajl, :json], default: :yajl
 
     config_param :time_format, :string, default: "%F %T.%N %z"
 
