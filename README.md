@@ -4,6 +4,13 @@ Output Plugin for PostgreSQL Json Type.
 
 <b>Json type is availble in PostgreSQL version over 9.2</b>
 
+## Requirements
+
+| fluent-plugin-pgjson | fluentd    | Ruby   |
+|----------------------|------------|--------|
+| >= 1.0.0             | >= v1.0.0  | >= 2.2 |
+|  < 1.0.0             | >= v0.12.0 | >= 1.9 |
+
 ## Installation
 
 ```
