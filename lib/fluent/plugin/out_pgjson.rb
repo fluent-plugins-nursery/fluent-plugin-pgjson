@@ -5,7 +5,7 @@ require 'json'
 
 module Fluent::Plugin
 
-class PgJsonOutput < Fluent::Output
+class PgJsonOutput < Fluent::Plugin::Output
   Fluent::Plugin.register_output('pgjson', self)
 
   helpers :compat_parameters
