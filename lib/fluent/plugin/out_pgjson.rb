@@ -95,13 +95,13 @@ module Fluent::Plugin
         @conn.put_copy_end( errmsg )
         @conn.get_result
         @conn.close()
-	@conn = nil
+        @conn = nil
         raise
       else
         @conn.put_copy_end
         res = @conn.get_result
-	@conn.close()
-	@conn = nil
+        @conn.close()
+        @conn = nil
         raise res.result_error_message if res.result_status!=PG::PGRES_COMMAND_OK
       end
     end
