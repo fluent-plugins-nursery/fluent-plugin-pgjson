@@ -100,8 +100,10 @@ module Fluent::Plugin
       else
         @conn.put_copy_end
         res = @conn.get_result
-        @conn.close()
-        @conn = nil
+        if res.result_status!=PG::PGRES_COMMAND_OK
+          @conn.close()
+          @conn = nil
+        end
         raise res.result_error_message if res.result_status!=PG::PGRES_COMMAND_OK
       end
     end
