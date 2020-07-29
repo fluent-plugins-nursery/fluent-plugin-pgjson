@@ -94,10 +94,16 @@ module Fluent::Plugin
         errmsg = "%s while copy data: %s" % [ err.class.name, err.message ]
         @conn.put_copy_end( errmsg )
         @conn.get_result
+        @conn.close()
+        @conn = nil
         raise
       else
         @conn.put_copy_end
         res = @conn.get_result
+        if res.result_status!=PG::PGRES_COMMAND_OK
+          @conn.close()
+          @conn = nil
+        end
         raise res.result_error_message if res.result_status!=PG::PGRES_COMMAND_OK
       end
     end
