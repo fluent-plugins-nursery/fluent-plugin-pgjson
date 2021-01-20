@@ -1,5 +1,7 @@
 # Fluent::Plugin::PgJson, a plugin for [Fluentd](http://fluentd.org)
 
+![linux](https://github.com/fluent-plugins-nursery/fluent-plugin-pgjson/workflows/linux/badge.svg?branch=master)
+
 Output Plugin for PostgreSQL Json Type.
 
 <b>Json type is availble in PostgreSQL version over 9.2</b>
