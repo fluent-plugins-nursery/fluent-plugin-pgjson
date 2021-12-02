@@ -84,12 +84,16 @@ module Fluent::Plugin
 
     def write(chunk)
       init_connection
-      @conn.exec("COPY #{@table} (#{@tag_col}, #{@time_col}, #{@record_col}) FROM STDIN WITH DELIMITER E'\\x01'")
       begin
+        @conn.exec("COPY #{@table} (#{@tag_col}, #{@time_col}, #{@record_col}) FROM STDIN WITH DELIMITER E'\\x01'")
         tag = chunk.metadata.tag
         chunk.msgpack_each do |time, record|
           @conn.put_copy_data "#{tag}\x01#{time}\x01#{record_value(record)}\n"
         end
+      rescue PG::UnableToSend
+        @conn.close()
+        @conn = nil
+        raise
       rescue => err
         errmsg = "%s while copy data: %s" % [ err.class.name, err.message ]
         @conn.put_copy_end( errmsg )
