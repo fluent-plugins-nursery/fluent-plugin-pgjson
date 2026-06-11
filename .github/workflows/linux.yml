@@ -21,7 +21,7 @@ jobs:
         ruby: ${{ fromJson(needs.ruby-versions.outputs.versions) }}
         exclude:
           - ruby: head
-        postgres: [ '9', '10', '11', '12', '13' ]
+        postgres: [ '14', '15', '16', '17', '18' ]
         os:
           - ubuntu-latest
     services:
