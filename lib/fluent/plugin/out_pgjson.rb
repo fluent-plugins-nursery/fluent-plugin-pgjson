@@ -1,6 +1,5 @@
 require "fluent/plugin/output"
 require "pg"
-require "yajl"
 require "json"
 
 module Fluent::Plugin
@@ -34,7 +33,7 @@ module Fluent::Plugin
     desc "If true, insert records formatted as msgpack"
     config_param :msgpack, :bool, default: false
     desc "JSON encoder (yajl/json)"
-    config_param :encoder, :enum, list: [:yajl, :json], default: :yajl
+    config_param :encoder, :enum, list: [:yajl, :json], default: :json # NOTE: Contains yajl for backward compatibility
 
     config_param :time_format, :string, default: "%F %T.%N %z"
 
@@ -56,7 +55,8 @@ module Fluent::Plugin
       end
       @encoder = case @encoder
                  when :yajl
-                   Yajl
+                   log.info "encoder 'yajl' is deprecated. Please use 'json' instead."
+                   JSON
                  when :json
                    JSON
                  end
