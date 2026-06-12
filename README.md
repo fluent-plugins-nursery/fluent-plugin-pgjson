@@ -68,7 +68,7 @@ CREATE TABLE fluentd (
   #tag_col tag
   #record_col record
   #msgpack false
-  #encoder yajl
+  #encoder json
 </match>
 ```
 
@@ -87,7 +87,7 @@ CREATE TABLE fluentd (
 |tag_col|The column name for the tag|`tag`|
 |record_col|The column name for the record|`record`|
 |msgpack|If true, insert records formatted as msgpack|`false`|
-|encoder|JSON encoder (`yajl`, `json`)|`yajl`|
+|encoder|JSON encoder (`yajl`, `json`) Starting from v1.0.3, `yajl` is no longer available and internally defaults to `json`|`json`|
 
 ## Copyright
 
