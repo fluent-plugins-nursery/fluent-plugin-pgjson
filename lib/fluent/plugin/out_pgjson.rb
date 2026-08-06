@@ -95,9 +95,12 @@ module Fluent::Plugin
         @conn = nil
         raise
       rescue => err
-        errmsg = "%s while copy data: %s" % [ err.class.name, err.message ]
-        @conn.put_copy_end( errmsg )
-        @conn.get_result
+        conn_status = @conn.status
+        if conn_status==PG::CONNECTION_OK
+            errmsg = "%s while copy data: %s" % [ err.class.name, err.message ]
+            @conn.put_copy_end( errmsg )
+            @conn.get_result
+        end
         @conn.close()
         @conn = nil
         raise
